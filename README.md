@@ -1,4 +1,8 @@
 # Pascal-Compiler
 a Pascal Compiler call "HN IDE"
 
-Made by HN using for pascal programming
+Làm Bởi Hoàng Nguyên
+
+Hiện tại chỉ hỗ trợ Tiếng Việt :>
+
+Have Fun! :D
