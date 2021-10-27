@@ -17,24 +17,41 @@ def set_file_path(path):
 
 def open_file():
     path = askopenfilename(filetypes=[('Pascal Files', '*.pas')])
-    with open(path,'r') as file:
-        code = file.read()
-        editor.delete('1.0',END)
-        editor.insert('1.0',code)
-        set_file_path(path)
+    if path:
+        with open(path,'r') as file:
+            code = file.read()
+            editor.delete('1.0',END)
+            editor.insert('1.0',code)
+            set_file_path(path)
+    set_file_path(path)
 
-def save_as():
+def save():
     if file_path == '':
         path = asksaveasfilename(filetypes=[('Pascal Files', '*.pas')])
+        if not '.pas' in path:
+            path += '.pas'
     else:
         path = file_path
-    with open(path, 'w') as file:
-        code = editor.get('1.0',END)
-        file.write(code)
+    if path:
+        with open(path, 'w') as file:
+            code = editor.get('1.0',END)
+            file.write(code)
+            set_file_path(path)
+        return True
         set_file_path(path)
+    else:
+        return False
+
+def save_as():
+    path = asksaveasfilename(filetypes=[('Pascal Files', '*.pas')])
+    if path:
+        with open(path, 'w') as file:
+            code = editor.get('1.0',END)
+            file.write(code)
+            set_file_path(path)
 
 def exit():
-    pass
+    compiler.destroy
 
 def run():
     global run_file,run_path
@@ -49,34 +66,32 @@ def run():
 
 def compile_file():
     compile_message = ''
-    if file_path == '':
-        save_promt = Toplevel()
-        text = Label(save_promt,text='Hãy lưu File trước khi chạy')
-        text.pack()
-        return
-    save_as()
-    compile_path = file_path.replace('\\','\\\\')
-    command = f'fpc {compile_path}'
-    process = subprocess.Popen(command,shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
-    output,error = process.communicate()
+    if save():
+        compile_path = file_path.replace('\\','\\\\')
+        command = f'fpc {compile_path}'
+        process = subprocess.Popen(command,shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+        output,error = process.communicate()
     
-    with open("output.txt",'w') as f:
-        f.write(output.decode("utf-8"))
-    i = open_txt()
-    for l in range(6,len(i)):
-        compile_message += i[l]
+        with open("output.txt",'w') as f:
+            f.write(output.decode("utf-8"))
+        i = open_txt()
+        for l in range(6,len(i)):
+            compile_message += i[l]
         
-    if 'Error:' in str(output):
-        notice_text.config(text="Trạng thái: Lỗi    ",fg='red')
-        code_output.config(height=7,fg='red')
-        compile_message = "Đã xảy ra lỗi!\n"+compile_message
-    else:
-        notice_text.config(text="Trạng thái: Ổn định",fg='green')
-        code_output.config(height=7,fg='black')
-        compile_message = "Đã dịch xong CT, không xảy ra lỗi\n"+compile_message
+        if 'Error:' in str(output):
+            notice_text.config(text="Trạng thái: Lỗi    ",fg='red')
+            code_output.config(height=7,fg='red')
+            compile_message = "Đã xảy ra lỗi!\n"+compile_message
+        else:
+            notice_text.config(text="Trạng thái: Ổn định",fg='green')
+            code_output.config(height=7,fg='black')
+            compile_message = "Đã dịch xong CT, không xảy ra lỗi\n"+compile_message
 
-    code_output.delete('1.0',END)
-    code_output.insert('1.0',compile_message)
+        code_output.delete('1.0',END)
+        code_output.insert('1.0',compile_message)
+    else:
+        code_output.delete('1.0',END)
+        code_output.insert('1.0',"Chua luu file, khong the chay!")
 
 def about():
     thong_tin = Toplevel()
@@ -120,6 +135,11 @@ def back_ground(e):
         editor.insert(pos,"}")
         editor.mark_set("insert", pos)
 
+def new_file():
+    global file_path
+    editor.delete("1.0",END)
+    file_path = ''
+
 
 menu_bar = Menu(compiler)
 
@@ -128,8 +148,9 @@ first_text.pack()
 
 # File menu =============================== #
 file_menu = Menu(menu_bar, tearoff=0)
+file_menu.add_command(label='Moi', command=new_file)
 file_menu.add_command(label='Mở', command=open_file)
-file_menu.add_command(label='Lưu', command=save_as)
+file_menu.add_command(label='Lưu', command=save)
 file_menu.add_command(label='Lưu ở', command=save_as)
 file_menu.add_command(label='Thoát', command=compiler.destroy)
 menu_bar.add_cascade(label='Tệp', menu=file_menu)
