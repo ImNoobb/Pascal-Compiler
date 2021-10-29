@@ -7,7 +7,7 @@ Hiện tại chỉ hỗ trợ Tiếng Việt :>
 
 Have Fun! :D
 ## Download
-sắp có
+Link: https://www.mediafire.com/file/a7yjnpajh3evdq3/HN_PascalEditor.rar/file
 ## Ưu điểm:
 Dễ nhìn
 
