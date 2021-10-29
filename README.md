@@ -6,7 +6,7 @@ Làm Bởi Hoàng Nguyên
 Hiện tại chỉ hỗ trợ Tiếng Việt :>
 
 Have Fun! :D
-## Download
+## Download v1.0
 Link: https://www.mediafire.com/file/a7yjnpajh3evdq3/HN_PascalEditor.rar/file
 ## Ưu điểm:
 Dễ nhìn
