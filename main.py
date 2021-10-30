@@ -94,10 +94,14 @@ def run_file():
     os.system(run_path)
 
 def about():
-    pass
+    about_window = Toplevel()
+    text1= Label(about_window,text='Made 100% by HN! :)')
+    text1.pack()
 
 def github():
-    pass
+    github_window = Toplevel()
+    link = Label(github_window,text='Link: https://github.com/ImNoobb/Pascal-Compiler')
+    link.pack()
 
 def save_file_notice():
     result = mb.askyesnocancel("Khoan đã","Có lưu file hiện tại?")
@@ -107,6 +111,27 @@ def save_file_notice():
         pass
     else:
         return True
+
+def back_ground(event):
+    widget = window.focus_get()
+    if '.!frame.!text'in str(widget):
+        pos = editor.index(INSERT)
+        if event.char == '(':
+            editor.insert(pos,')')
+            editor.mark_set("insert",pos)
+        elif event.char == '[':
+            editor.insert(pos,']')
+            editor.mark_set("insert",pos)
+        elif event.char == '{':
+            editor.insert(pos,'}')
+            editor.mark_set("insert",pos)
+        elif event.char == '"':
+            editor.insert(pos,'"')
+            editor.mark_set("insert",pos)
+        elif event.char == "'":
+            editor.insert(pos,"'")
+            editor.mark_set("insert",pos)
+
 
 # Setup window #
 window = Tk()
@@ -180,5 +205,9 @@ code_output.pack()
 status_text = Label(text="Trạng thái: Ổn định",fg='green')
 status_text.pack(side=RIGHT)
 # ==================================== #
+# Key binds ==== #
+window.bind('<Control-Key-s>', save_file)
+window.bind("<Key>",back_ground)
+
 
 window.mainloop()
