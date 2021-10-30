@@ -35,7 +35,7 @@ def open_file():
             editor.insert('1.0',code)
     set_file_path(path)
 
-def save_file():
+def save_file(e):
     if file_path == '':
         path = asksaveasfilename(filetypes=[('Pascal Files', '*.pas')])
         if not '.pas' in path and path!='':
@@ -106,7 +106,7 @@ def github():
 def save_file_notice():
     result = mb.askyesnocancel("Khoan đã","Có lưu file hiện tại?")
     if result:
-        save_file()
+        save_file(1)
     elif result == False:
         pass
     else:
